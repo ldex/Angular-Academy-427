@@ -2,16 +2,30 @@
     {{ title }}
 </h2>
 
-<ul class="products">
-    @for (product of products; track product.id) {
-        <li [class.discontinued]="product.discontinued"
-            [class.selected]="product == selectedProduct"
-            (click)="onSelect(product)">
-            <span class="name">{{ product.name | uppercase }}</span>
-            <span class="description">{{ product.description }}</span>
-            <span class="price">{{ product.price | currency:'CAD':'symbol-narrow':'.2' }}</span>
-        </li>
-    }
-</ul>
+@if (errorMessage) {
+    <h2 class="errorMessage">{{ errorMessage }}</h2>
+} @else {
+    @if (products$ | async; as products) {
+        <ul class="products">
+            @for (product of products | slice:start:end; track product.id) {
+                <li [class.discontinued]="product.discontinued"
+                    [class.selected]="product == selectedProduct"
+                    (click)="onSelect(product)">
+                    <span class="name">{{ product.name | uppercase }}</span>
+                    <span class="description">{{ product.description }}</span>
+                    <span class="price">{{ product.price | currency:'CAD':'symbol-narrow':'.2' }}</span>
+                </li>
+            }
+        </ul>
 
-<app-product-detail [product]="selectedProduct"></app-product-detail>
+        <div>
+            <button (click)="previousPage()" [disabled]="start == 0">Previous Page</button>
+            Page {{ pageNumber }}
+            <button (click)="nextPage()">Next Page</button>
+        </div>
+
+    } @else {
+        <div class="loading"></div>
+    }
+    <app-product-detail [product]="selectedProduct"></app-product-detail>
+}
