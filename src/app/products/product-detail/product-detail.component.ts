@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { Product } from '../../models/product.interface';
 import { CurrencyPipe, DatePipe, UpperCasePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 
 @Component({
@@ -16,6 +16,20 @@ export class ProductDetailComponent {
 
   private activatedRoute = inject(ActivatedRoute)
   private productService = inject(ProductService)
+  private router = inject(Router)
+
+  deleteProduct() {
+    this
+      .productService
+      .deleteProduct(this.product.id)
+      .subscribe(
+        () => {
+          console.log('Product was deleted!')
+          this.productService.refreshList()
+          this.router.navigateByUrl('/products')
+        }
+      )
+  }
 
   constructor() {
     let id = this.activatedRoute.snapshot.params.id

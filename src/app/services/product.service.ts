@@ -17,6 +17,15 @@ export class ProductService {
 
   products$: Observable<Product[]>
 
+  deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(this.baseUrl + id);
+  }
+
+  insertProduct(newProduct: Product): Observable<Product> {
+    newProduct.modifiedDate = new Date();
+    return this.http.post<Product>(this.baseUrl, newProduct);
+  }
+
   getProductById(id: number): Observable<Product> {
     return this
             .products$
@@ -25,7 +34,11 @@ export class ProductService {
             )
   }
 
-  initProducts() {
+  refreshList() {
+    this.initProducts();
+  }
+
+  private initProducts() {
     this.products$ = this
                         .http
                         .get<Product[]>(this.baseUrl)

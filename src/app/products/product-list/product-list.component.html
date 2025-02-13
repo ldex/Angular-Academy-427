@@ -15,7 +15,11 @@
             <span class="price">{{ product.price | currency:'CAD':'symbol-narrow':'.2' }}</span>
         </li>
         }
-</ul>
+    </ul>
+
+    <div class="right">
+        <a routerLink="insert">Add new product...</a>
+    </div>
 
 <div>
     <button (click)="previousPage()" [disabled]="start == 0">Previous Page</button>
