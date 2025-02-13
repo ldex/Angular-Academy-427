@@ -4,6 +4,7 @@ import { AsyncPipe, CurrencyPipe, SlicePipe, UpperCasePipe } from '@angular/comm
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
 import { ProductService } from '../../services/product.service';
 import { catchError, EMPTY, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -37,9 +38,11 @@ export class ProductListComponent {
   }
 
   private productService = inject(ProductService)
+  private router = inject(Router)
 
   onSelect(product: Product) {
     this.selectedProduct = product
+    this.router.navigateByUrl('/products/' + product.id)
   }
 
   products$: Observable<Product[]> = this
